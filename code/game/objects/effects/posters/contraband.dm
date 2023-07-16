@@ -530,7 +530,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/poster/contraband/wildcat, 32)
 
 /obj/structure/sign/poster/contraband/babel_device
 	name = "Linguafacile Babel Device"
-	desc = "A poster advertising Linguafacile's new Babel Device model. 'Calibrated for excellent performance on all Human languages, as well as most common variants of Draconic and Mothic!'"
+	desc = "A poster advertising Linguafacile's old Babel Device. Product discontinued due to intracompany conflicts."
 	icon_state = "babel_device"
 
 MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/poster/contraband/babel_device, 32)
