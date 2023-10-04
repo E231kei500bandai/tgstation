@@ -164,6 +164,9 @@
 		ui = new(user, src, "ServerMonitor", name)
 		ui.open()
 
+/obj/machinery/computer/telecomms/server/translator
+	universal_translate = TRUE
+
 #undef MAX_NETWORK_ID_LENGTH
 #undef MAIN_VIEW
 #undef SERVER_VIEW
