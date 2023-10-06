@@ -102,7 +102,6 @@
 /area/ruin/space/has_grav/listeningstation)
 "ct" = (
 /obj/machinery/atmospherics/pipe/smart/simple/supply/visible/layer4,
-/obj/item/stock_parts/servo,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/listeningstation)
 "cU" = (
@@ -198,18 +197,7 @@
 /area/ruin/space)
 "hq" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/machinery/telecomms/server,
-/turf/open/floor/iron/dark,
-/area/ruin/space/has_grav/listeningstation)
-"hK" = (
-/obj/structure/extinguisher_cabinet/directional/south,
-/obj/machinery/hydroponics/soil,
-/turf/open/floor/iron,
-/area/ruin/space/has_grav/listeningstation)
-"jp" = (
-/obj/effect/decal/cleanable/dirt,
 /obj/item/circuitboard/machine/telecomms/processor,
-/obj/item/stock_parts/servo,
 /obj/item/stock_parts/servo,
 /obj/item/stock_parts/servo,
 /obj/structure/rack,
@@ -218,6 +206,24 @@
 /obj/item/stock_parts/subspace/treatment,
 /obj/item/stock_parts/subspace/analyzer,
 /obj/item/stock_parts/subspace/amplifier,
+/obj/item/stock_parts/subspace/filter,
+/obj/machinery/light/small/built/directional/east,
+/obj/item/circuitboard/machine/telecomms/hub,
+/turf/open/floor/plating,
+/area/ruin/space/has_grav/listeningstation)
+"hK" = (
+/obj/structure/extinguisher_cabinet/directional/south,
+/obj/machinery/hydroponics/soil,
+/turf/open/floor/iron,
+/area/ruin/space/has_grav/listeningstation)
+"hS" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/atmospherics/components/unary/vent_pump/on/layer4,
+/turf/open/floor/iron/dark,
+/area/ruin/space/has_grav/listeningstation)
+"jp" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/iron/five,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/listeningstation)
 "jr" = (
@@ -230,6 +236,7 @@
 "ko" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/turf_decal/tile/red/opposingcorners,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/listeningstation)
 "kG" = (
@@ -248,7 +255,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/computer/libraryconsole/bookmanagement,
 /obj/structure/table/reinforced,
-/turf/open/space/basic,
+/turf/open/floor/plating,
 /area/ruin/space/has_grav/listeningstation)
 "lk" = (
 /obj/item/radio/intercom/directional/east{
@@ -287,16 +294,19 @@
 /obj/structure/marker_beacon/cerulean,
 /turf/open/floor/plating/airless,
 /area/ruin/space)
-"mZ" = (
-/obj/item/stack/sheet/iron/twenty,
+"mi" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/closet/crate,
-/obj/item/stock_parts/subspace/ansible,
-/obj/item/stock_parts/subspace/filter,
-/obj/item/stock_parts/servo,
-/obj/item/stock_parts/servo,
-/obj/item/stock_parts/servo,
+/obj/structure/frame/machine,
+/obj/item/stack/cable_coil/cut,
 /turf/open/floor/plating,
+/area/ruin/space/has_grav/listeningstation)
+"mZ" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/telecomms/server{
+	toggled = 0;
+	id = "Monitoring Server"
+	},
+/turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/listeningstation)
 "nG" = (
 /obj/effect/decal/cleanable/blood/drip,
@@ -321,6 +331,20 @@
 /obj/item/bedsheet/syndie,
 /obj/structure/bed,
 /turf/open/floor/iron/grimy,
+/area/ruin/space/has_grav/listeningstation)
+"pi" = (
+/obj/machinery/door/airlock/centcom{
+	name = "Syndicate Secure Airlock System";
+	desc = "Truly, a marvel of modern engineering."
+	},
+/obj/structure/cable,
+/obj/machinery/door/firedoor,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/effect/mapping_helpers/airlock/access/all/syndicate/general,
+/obj/effect/turf_decal/tile/red/opposingcorners,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/listeningstation)
 "qD" = (
 /obj/machinery/door/airlock/external/ruin{
@@ -386,6 +410,14 @@
 /obj/effect/mapping_helpers/airalarm/syndicate_access,
 /turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/listeningstation)
+"uo" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/circuitboard/machine/telecomms/bus,
+/obj/effect/decal/cleanable/ash,
+/turf/open/floor/plating,
+/area/ruin/space/has_grav/listeningstation)
 "uI" = (
 /obj/machinery/airalarm/directional/north,
 /obj/effect/decal/cleanable/blood/old,
@@ -436,6 +468,7 @@
 	},
 /obj/machinery/light/small/directional/north,
 /obj/effect/turf_decal/tile/red/opposingcorners,
+/obj/structure/sign/departments/telecomms/alt/directional/north,
 /turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/listeningstation)
 "xn" = (
@@ -464,7 +497,7 @@
 /area/ruin/space/has_grav/listeningstation)
 "yl" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/stock_parts/servo,
+/obj/item/light/bulb/broken,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/listeningstation)
 "ym" = (
@@ -504,7 +537,7 @@
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/effect/turf_decal/tile/blue/half/contrasted,
-/turf/open/floor/iron,
+/turf/open/floor/plating,
 /area/ruin/space/has_grav/listeningstation)
 "zp" = (
 /turf/closed/wall,
@@ -626,25 +659,18 @@
 	},
 /turf/open/floor/iron,
 /area/ruin/space/has_grav/listeningstation)
-"Ee" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/machinery/telecomms/hub,
-/turf/open/floor/plating,
-/area/ruin/space/has_grav/listeningstation)
 "Ey" = (
 /obj/effect/turf_decal/delivery,
 /obj/structure/closet/emcloset/anchored,
 /obj/machinery/atmospherics/pipe/layer_manifold/visible{
 	dir = 4
 	},
-/obj/item/stock_parts/subspace/treatment,
-/obj/item/stock_parts/subspace/treatment,
-/obj/item/stock_parts/micro_laser,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/listeningstation)
 "ED" = (
 /obj/structure/cable,
 /obj/effect/turf_decal/tile/red/opposingcorners,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/listeningstation)
 "EK" = (
@@ -653,6 +679,7 @@
 /area/ruin/space)
 "Fy" = (
 /obj/effect/decal/cleanable/dirt,
+/obj/item/kirbyplants/random,
 /turf/open/floor/iron,
 /area/ruin/space/has_grav/listeningstation)
 "FC" = (
@@ -713,7 +740,11 @@
 /turf/open/floor/iron/grimy,
 /area/ruin/space/has_grav/listeningstation)
 "HX" = (
-/obj/effect/decal/cleanable/dirt,
+/obj/effect/mapping_helpers/airalarm/syndicate_access,
+/obj/machinery/airalarm/directional/south,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/effect/decal/cleanable/ash,
+/obj/item/stock_parts/subspace/filter,
 /turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/listeningstation)
 "It" = (
@@ -746,6 +777,17 @@
 	},
 /turf/template_noop,
 /area/template_noop)
+"Kw" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/closet/crate,
+/obj/item/stock_parts/subspace/ansible,
+/obj/item/stock_parts/servo,
+/obj/item/stock_parts/servo,
+/obj/item/stock_parts/servo,
+/obj/machinery/light/small/broken/directional/west,
+/obj/item/stock_parts/subspace/filter,
+/turf/open/floor/iron/dark,
+/area/ruin/space/has_grav/listeningstation)
 "KG" = (
 /obj/structure/curtain,
 /obj/effect/decal/cleanable/dirt,
@@ -753,8 +795,29 @@
 /area/ruin/space/has_grav/listeningstation)
 "KV" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/frame/machine,
-/turf/open/floor/iron/dark,
+/obj/item/stock_parts/servo{
+	pixel_y = 10;
+	pixel_x = -1
+	},
+/obj/item/stock_parts/micro_laser{
+	pixel_y = -3;
+	pixel_x = -7
+	},
+/obj/structure/table,
+/obj/item/stock_parts/servo{
+	pixel_x = 1;
+	pixel_y = 6
+	},
+/obj/machinery/firealarm/directional/east,
+/obj/item/stock_parts/servo{
+	pixel_x = 7;
+	pixel_y = 2
+	},
+/obj/item/stock_parts/servo{
+	pixel_x = 7;
+	pixel_y = -2
+	},
+/turf/open/floor/plating,
 /area/ruin/space/has_grav/listeningstation)
 "Lq" = (
 /obj/effect/spawner/random/trash/cigbutt,
@@ -867,7 +930,8 @@
 /area/ruin/space/has_grav/listeningstation)
 "PU" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/kirbyplants/random,
+/obj/item/stack/cable_coil/cut,
+/obj/item/stock_parts/subspace/filter,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/listeningstation)
 "QE" = (
@@ -921,7 +985,7 @@
 /area/ruin/space/has_grav/listeningstation)
 "SZ" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/circuitboard/machine/telecomms/bus,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/listeningstation)
 "TK" = (
@@ -946,8 +1010,6 @@
 "Uh" = (
 /obj/effect/turf_decal/bot_red,
 /obj/structure/tank_frame,
-/obj/item/stock_parts/servo,
-/obj/item/stack/cable_coil,
 /turf/open/floor/plating,
 /area/ruin/space/has_grav/listeningstation)
 "UI" = (
@@ -958,6 +1020,7 @@
 /obj/structure/cable,
 /obj/machinery/atmospherics/components/unary/vent_pump/on/layer4,
 /obj/effect/turf_decal/tile/red/opposingcorners,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/listeningstation)
 "Vq" = (
@@ -1000,7 +1063,7 @@
 /obj/machinery/telecomms/relay/preset/ruskie{
 	use_power = 0
 	},
-/turf/open/floor/plating,
+/turf/open/floor/iron/dark,
 /area/ruin/space/has_grav/listeningstation)
 "WD" = (
 /obj/structure/table,
@@ -1421,7 +1484,7 @@ vI
 vI
 JB
 mZ
-dJ
+Kw
 VP
 JB
 ae
@@ -1447,8 +1510,8 @@ AV
 vI
 vI
 JB
-FV
-HX
+dJ
+hS
 HX
 JB
 JB
@@ -1475,9 +1538,9 @@ vI
 vI
 JB
 PU
-Ee
+FV
 SZ
-nX
+pi
 ko
 ED
 MT
@@ -1501,8 +1564,8 @@ AV
 vI
 vI
 JB
-FV
-FV
+uo
+mi
 yl
 JB
 xh
