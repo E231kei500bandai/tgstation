@@ -6,7 +6,7 @@
 // Original "background" tone.
 /obj/item/paper/fluff/ruins/listeningstation/reports/march
 	name = "march report"
-	default_raw_text = {"Accepted new assignment from liaison at MI13. Mission: Report on all Nanotrasen activities in this sector.
+	default_raw_text = {"Accepted new assignment from liaison at MI13. Mission: Monitor and report on all Nanotrasen activities in this sector.
 	<br> Secondary Mission is to ensure survival of the person in the sleeper. This should not be hard, I have had personal experience with
 	<br> this model of sleeper, and I know it to be of good quality.
 	"}
@@ -111,6 +111,8 @@
 	<br>
 	<br>You have been assigned to a newly constructed listening post constructed within an asteroid in Nanotrasen space to monitor their plasma mining operations.
 	<br>Accurate intel is crucial to the success of our operatives onboard, do not fail us.
+	<br>
+	<br>The listening post is currently monitoring a Nanotrasesn telecommunications network. Ensure the relay is never unlinked from this network; it can only be relinked through a risky infiltration process.
 	<br>
 	<br>You may view intelligence reports from your predecessors in the filing cabinet in your office.
 	"}
