@@ -28,9 +28,10 @@ type Language = {
 
 type Data = {
   is_living: BooleanLike;
-  admin_mode: BooleanLike;
+  privileged_mode: BooleanLike;
   omnitongue: BooleanLike;
   languages: Language[];
+  title: string;
 };
 
 type LanguageProps = {
@@ -99,7 +100,7 @@ const LanguageNameAndDesc = (props: LanguageProps) => {
 
 const LanguageRow = (props: LanguageProps) => {
   const { act, data } = useBackend<Data>();
-  const { is_living, admin_mode } = data;
+  const { is_living, privileged_mode } = data;
   const { language } = props;
 
   return (
@@ -166,7 +167,7 @@ const LanguageRow = (props: LanguageProps) => {
           />
         </Table.Cell>
       )}
-      {!!admin_mode && (
+      {!!privileged_mode && (
         <Table.Cell>
           <Button
             disabled={language.can_speak && language.can_understand}
@@ -211,14 +212,14 @@ const OmnitongueToggle = (props) => {
 
 export const LanguageMenu = (props) => {
   const { data } = useBackend<Data>();
-  const { admin_mode, is_living, languages } = data;
+  const { privileged_mode, is_living, languages, title } = data;
 
-  // only show languages we can speak OR understand, UNLESS we're an admin
+  // only show languages we can speak OR understand, UNLESS we're in privileged mode
   // also, push all languages we can speak to the top, then all languagse we can only understand, then alphabetize
   const shown_languages = languages
     .filter(
       (language) =>
-        admin_mode ||
+        privileged_mode ||
         language.can_speak ||
         language.can_understand ||
         language.partial_understanding > 0,
@@ -231,18 +232,18 @@ export const LanguageMenu = (props) => {
 
   return (
     <Window
-      title="Language Menu"
-      width={admin_mode ? 700 : 500}
+      title={title}
+      width={privileged_mode ? 700 : 500}
       height={Math.min(
-        shown_languages.length * 25 + (admin_mode ? 100 : 70),
+        shown_languages.length * 25 + (privileged_mode ? 100 : 70),
         500,
       )}
     >
       <Window.Content>
         <Section
           scrollable
-          title={admin_mode ? <i>- Admin Mode -</i> : null}
-          buttons={admin_mode ? <OmnitongueToggle /> : null}
+          title={privileged_mode ? <i>- Editor -</i> : null}
+          buttons={privileged_mode ? <OmnitongueToggle /> : null}
           fill
         >
           <Table>
@@ -282,7 +283,7 @@ export const LanguageMenu = (props) => {
                   </Tooltip>
                 </Table.Cell>
               )}
-              {!!admin_mode && <Table.Cell />}
+              {!!privileged_mode && <Table.Cell />}
             </Table.Row>
             {shown_languages.map((language) => (
               <LanguageRow key={language.name} language={language} />
