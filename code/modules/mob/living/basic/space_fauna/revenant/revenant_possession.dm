@@ -35,7 +35,7 @@
 			continue
 		if(human_target.GetComponent(/datum/component/revenant_possession))
 			continue
-		if(!LAZYFIND(caster.drained_mobs, REF(human_target)) && !LAZYFIND(caster.leeched_mobs, REF(human_target)))
+		if(!LAZYFIND(caster.drained_mobs, REF(human_target)))
 			continue
 		targets += human_target
 	return targets
