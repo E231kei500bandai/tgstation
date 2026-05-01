@@ -75,28 +75,26 @@ tether_beam = tetherer.Beam(owner, icon_state = "drain_life", time = duration)
 	if(QDELETED(tetherer) || tetherer.dormant || QDELETED(owner))
 		qdel(src)
 		return
-		
-	if(get_dist(tetherer, owner) > 15)
-		to_chat(tetherer, span_revenwarning("Your tether to [owner] snaps from distance."))
-		qdel(src)
-		return
 
 /datum/status_effect/revenant_tether/proc/on_target_death(datum/source, gibbed)
 	SIGNAL_HANDLER
-	if(!QDELETED(tetherer))
-		to_chat(tetherer, span_revenboldnotice("Your tethered victim [owner] has perished, unleashing a violent spectral shockwave!"))
-		tetherer.apply_status_effect(/datum/status_effect/revenant/revealed, 10 SECONDS)
+	if(QDELETED(tetherer))
+		qdel(src)
+		return
 		
-	var/turf/death_turf = get_turf(owner)
+	to_chat(tetherer, span_revenboldnotice("Your tethered victim [owner] has perished! A violent spectral shockwave erupts from your location, revealing you to the living!"))
+	tetherer.apply_status_effect(/datum/status_effect/revenant/revealed, 10 SECONDS)
+		
+	var/turf/death_turf = get_turf(tetherer)
 	if(death_turf)
 		playsound(death_turf, 'sound/effects/screech.ogg', 100, TRUE)
 		new /obj/effect/temp_visual/revenant(death_turf)
 		empulse(death_turf, 2, 4)
 		
 		for(var/mob/living/victim in view(4, death_turf))
-			if(victim == owner || isrevenant(victim))
+			if(victim == tetherer || isrevenant(victim))
 				continue
-			to_chat(victim, span_revenwarning("A terrifying wail echoes in your mind as violet energy erupts from [owner]!"))
+			to_chat(victim, span_revenwarning("A terrifying wail echoes in your mind as violet energy erupts from [tetherer]!"))
 			victim.blind_eyes(2)
 			victim.add_confusion(5)
 			victim.adjust_stamina_loss(40)
