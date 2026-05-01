@@ -85,6 +85,7 @@ tether_beam = tetherer.Beam(owner, icon_state = "drain_life", time = duration)
 	SIGNAL_HANDLER
 	if(!QDELETED(tetherer))
 		to_chat(tetherer, span_revenboldnotice("Your tethered victim [owner] has perished, unleashing a violent spectral shockwave!"))
+		tetherer.apply_status_effect(/datum/status_effect/revenant/revealed, 10 SECONDS)
 		
 	var/turf/death_turf = get_turf(owner)
 	if(death_turf)
