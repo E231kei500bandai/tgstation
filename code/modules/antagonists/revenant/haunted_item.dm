@@ -58,6 +58,8 @@
 				continue
 			if(victim.invisibility >= INVISIBILITY_REVENANT)
 				continue
+			if(victim.has_status_effect(/datum/status_effect/revenant_tether))
+				continue
 			// This gives all mobs in view "5" haunt level
 			// For reference picking one up gives "2"
 			haunted_item.ai_controller.add_blackboard_key_assoc(BB_TO_HAUNT_LIST, victim, 5)

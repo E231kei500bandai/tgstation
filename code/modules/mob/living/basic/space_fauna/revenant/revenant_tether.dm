@@ -1,6 +1,6 @@
 /datum/action/cooldown/spell/list_target/revenant_tether
 	name = "Tether"
-	desc = "Tether to a living mortal. Their death will fuel your essence, and nearby machines will be prone to malfunction."
+	desc = "Tether to a living mortal. Their death will fuel your essence, and they will be immune to your area of effect abilities."
 	background_icon_state = "bg_revenant"
 	overlay_icon_state = "bg_revenant_border"
 	button_icon = 'icons/mob/actions/actions_revenant.dmi'
@@ -80,14 +80,6 @@ tether_beam = tetherer.Beam(owner, icon_state = "drain_life", time = duration)
 		to_chat(tetherer, span_revenwarning("Your tether to [owner] snaps from distance."))
 		qdel(src)
 		return
-		
-	if(prob(20))
-		for(var/obj/machinery/machine in view(4, owner))
-			if(istype(machine, /obj/machinery/power/apc) || istype(machine, /obj/machinery/power/smes))
-				continue
-			if(prob(10))
-				new /obj/effect/temp_visual/revenant(machine.loc)
-				machine.emag_act(tetherer)
 
 /datum/status_effect/revenant_tether/proc/on_target_death(datum/source, gibbed)
 	SIGNAL_HANDLER
