@@ -120,6 +120,9 @@
 	RegisterSignal(SSdcs, COMSIG_GLOB_MOB_DEATH, PROC_REF(on_mob_death))
 	RegisterSignals(src, list(
 		SIGNAL_ADDTRAIT(TRAIT_REVENANT_REVEALED),
+	), PROC_REF(on_revealed))
+	RegisterSignals(src, list(
+		SIGNAL_ADDTRAIT(TRAIT_REVENANT_REVEALED),
 		SIGNAL_REMOVETRAIT(TRAIT_REVENANT_REVEALED),
 		SIGNAL_ADDTRAIT(TRAIT_REVENANT_INHIBITED),
 		SIGNAL_REMOVETRAIT(TRAIT_REVENANT_INHIBITED),
@@ -563,3 +566,34 @@
 		LAZYADD(leeched_mobs, REF(victim)) // Ensure we don't leech from them again if revived/re-killed
 
 #undef REVENANT_STUNNED_TRAIT
+
+/// Signal handler for when the revenant is revealed
+/mob/living/basic/revenant/proc/on_revealed(datum/source, trait)
+	SIGNAL_HANDLER
+	if(dormant || QDELETED(src))
+		return
+	spectral_pulse()
+
+/// Triggers a violent spectral burst at the revenant's location
+/mob/living/basic/revenant/proc/spectral_pulse()
+	var/turf/pulse_turf = get_turf(src)
+	if(!pulse_turf)
+		return
+
+	playsound(pulse_turf, 'sound/effects/screech.ogg', 100, TRUE)
+	new /obj/effect/temp_visual/revenant(pulse_turf)
+	empulse(pulse_turf, 2, 4)
+
+	for(var/mob/living/victim in view(4, pulse_turf))
+		if(victim == src || isrevenant(victim))
+			continue
+		to_chat(victim, span_revenwarning("A terrifying wail echoes in your mind as violet energy erupts from [src]!"))
+		victim.blind_eyes(2)
+		victim.add_confusion(5)
+		victim.adjust_stamina_loss(40)
+
+	for(var/obj/machinery/light/light in view(4, pulse_turf))
+		light.flicker(rand(5, 10))
+		if(prob(50))
+			light.break_light_tube()
+
