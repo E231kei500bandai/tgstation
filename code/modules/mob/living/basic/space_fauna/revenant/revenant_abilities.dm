@@ -95,7 +95,7 @@
 //Defile: Corrupts nearby stuff, unblesses floor tiles.
 /datum/action/cooldown/spell/aoe/revenant/defile
 	name = "Defile"
-	desc = "Twists and corrupts the nearby area as well as dispelling holy auras on floors."
+	desc = "Twists and corrupts the nearby area as well as dispelling holy auras on floors. Scrambles radio transmissions in the area for a short duration."
 	button_icon_state = "defile"
 	cooldown_time = 15 SECONDS
 	aoe_radius = 4
@@ -103,6 +103,15 @@
 	cast_amount = 30
 	reveal_duration = 4 SECONDS
 	stun_duration = 2 SECONDS
+
+/datum/action/cooldown/spell/aoe/revenant/defile/cast(atom/cast_on)
+	. = ..()
+	if(. & SPELL_CANCEL_CAST)
+		return
+	
+	var/mob/living/basic/revenant/caster = owner
+	if(caster && istype(caster))
+		new /obj/item/jammer/spectral(get_turf(caster))
 
 /datum/action/cooldown/spell/aoe/revenant/defile/cast_on_thing_in_aoe(turf/victim, mob/living/basic/revenant/caster)
 	for(var/obj/effect/blessing/blessing in victim)
@@ -165,6 +174,14 @@
 	cast_amount = 60
 	unlock_amount = 125
 
+/datum/action/cooldown/spell/aoe/revenant/malfunction/cast(atom/cast_on)
+	. = ..()
+	if(. & SPELL_CANCEL_CAST)
+		return
+	var/mob/living/basic/revenant/caster = owner
+	if(caster && istype(caster))
+		caster.malfunctions_used++
+
 // A note to future coders: do not replace this with an EMP because it will wreck malf AIs and everyone will hate you.
 /datum/action/cooldown/spell/aoe/revenant/malfunction/cast_on_thing_in_aoe(turf/victim, mob/living/basic/revenant/caster)
 	for(var/mob/living/simple_animal/bot/bot in victim)
@@ -223,16 +240,16 @@
 		new /obj/effect/temp_visual/revenant(mob.loc)
 		if(iscarbon(mob))
 			if(ishuman(mob))
-				var/mob/living/carbon/human/H = mob
-				H.set_haircolor("#1d2953", override = TRUE) //will be reset when blight is cured
+				var/mob/living/carbon/human/human_target = mob
+				human_target.set_haircolor("#1d2953", override = TRUE) //will be reset when blight is cured
 				var/blightfound = FALSE
-				for(var/datum/disease/revblight/blight in H.diseases)
+				for(var/datum/disease/revblight/blight in human_target.diseases)
 					blightfound = TRUE
 					if(blight.stage < 5)
 						blight.stage++
 				if(!blightfound)
-					H.ForceContractDisease(new /datum/disease/revblight(), FALSE, TRUE)
-					to_chat(H, span_revenminor("You feel [pick("suddenly sick", "a surge of nausea", "like your skin is <i>wrong</i>")]."))
+					human_target.ForceContractDisease(new /datum/disease/revblight(), FALSE, TRUE)
+					to_chat(human_target, span_revenminor("You feel [pick("suddenly sick", "a surge of nausea", "like your skin is <i>wrong</i>")]."))
 			else
 				if(mob.reagents)
 					mob.reagents.add_reagent(/datum/reagent/toxin/plasma, 5)
@@ -296,7 +313,7 @@
 
 	victim.AddComponent(/datum/component/haunted_item, \
 		haunt_color = "#823abb", \
-		haunt_duration = rand(1 MINUTES, 3 MINUTES), \
+		haunt_duration = rand(5 MINUTES, 10 MINUTES), \
 		aggro_radius = aoe_radius - 1, \
 		spawn_message = span_revenwarning("[victim] begins to float and twirl into the air as it glows a ghastly purple!"), \
 		despawn_message = span_revenwarning("[victim] falls back to the ground, stationary once more."), \
@@ -304,3 +321,25 @@
 
 #undef REVENANT_DEFILE_MIN_DAMAGE
 #undef REVENANT_DEFILE_MAX_DAMAGE
+
+/obj/item/jammer/spectral
+	name = "spectral jammer"
+	desc = "A coalesced mass of corrupting energy."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "spark_purple"
+	invisibility = INVISIBILITY_REVENANT
+	anchored = TRUE
+	range = 5
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
+	item_flags = ABSTRACT
+
+/obj/item/jammer/spectral/Initialize(mapload)
+	. = ..()
+	active = TRUE
+	GLOB.active_jammers |= src
+	QDEL_IN(src, 30 SECONDS)
+
+/obj/item/jammer/spectral/Destroy()
+	active = FALSE
+	GLOB.active_jammers -= src
+	return ..()

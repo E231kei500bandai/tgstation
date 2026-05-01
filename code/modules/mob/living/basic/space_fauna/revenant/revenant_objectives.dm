@@ -1,8 +1,8 @@
 /datum/objective/revenant
 
 /datum/objective/revenant/New()
-	target_amount = rand(350, 600)
-	explanation_text = "Absorb [target_amount] points of essence from humans."
+	target_amount = rand(5, 10)
+	explanation_text = "Consume [target_amount] unique souls through harvest or passive leeching."
 	return ..()
 
 /datum/objective/revenant/check_completion()
@@ -11,8 +11,52 @@
 	var/mob/living/basic/revenant/owner_mob = owner.current
 	if(QDELETED(owner_mob) || owner_mob.stat == DEAD)
 		return FALSE
-	var/essence_stolen = owner_mob.essence_accumulated
-	return essence_stolen >= target_amount
+	return owner_mob.souls_consumed >= target_amount
+
+/datum/objective/revenant_tether
+
+/datum/objective/revenant_tether/New()
+	target_amount = rand(2, 4)
+	explanation_text = "Tether to mortals at least [target_amount] times."
+	return ..()
+
+/datum/objective/revenant_tether/check_completion()
+	if(!isrevenant(owner.current))
+		return FALSE
+	var/mob/living/basic/revenant/owner_mob = owner.current
+	if(QDELETED(owner_mob) || owner_mob.stat == DEAD)
+		return FALSE
+	return owner_mob.tethers_used >= target_amount
+
+/datum/objective/revenant_malfunction
+
+/datum/objective/revenant_malfunction/New()
+	target_amount = rand(3, 5)
+	explanation_text = "Cause machine chaos by casting Malfunction at least [target_amount] times."
+	return ..()
+
+/datum/objective/revenant_malfunction/check_completion()
+	if(!isrevenant(owner.current))
+		return FALSE
+	var/mob/living/basic/revenant/owner_mob = owner.current
+	if(QDELETED(owner_mob) || owner_mob.stat == DEAD)
+		return FALSE
+	return owner_mob.malfunctions_used >= target_amount
+
+/datum/objective/revenant_possession
+
+/datum/objective/revenant_possession/New()
+	target_amount = rand(1, 2)
+	explanation_text = "Possess a corpse and walk among the living at least [target_amount] times."
+	return ..()
+
+/datum/objective/revenant_possession/check_completion()
+	if(!isrevenant(owner.current))
+		return FALSE
+	var/mob/living/basic/revenant/owner_mob = owner.current
+	if(QDELETED(owner_mob) || owner_mob.stat == DEAD)
+		return FALSE
+	return owner_mob.possessions_used >= target_amount
 
 /datum/objective/revenant_fluff
 

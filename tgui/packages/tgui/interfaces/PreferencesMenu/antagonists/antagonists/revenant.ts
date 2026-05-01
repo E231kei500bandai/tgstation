@@ -5,9 +5,9 @@ const Revenant: Antagonist = {
   name: 'Revenant',
   description: [
     `
-      Become the mysterious revenant. Break windows, overload lights, and eat
-      the crew's life force, all while talking to your old community of
-      disgruntled ghosts.
+      Become a malevolent spectral parasite. Amplify the chaos caused by other threats,
+      tether to the living, briefly possess the dead, and feed on the essence of their
+      dying victims to power your ghostly disruptions.
     `,
   ],
   category: Category.Midround,
