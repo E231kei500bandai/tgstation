@@ -43,7 +43,7 @@
 			new /obj/effect/temp_visual/revenant(affected_mob.loc)
 		if(stagedamage < stage)
 			stagedamage++
-			need_mob_update += affected_mob.adjust_tox_loss(1 * stage * seconds_per_tick, updating_health = FALSE) //should, normally, do about 30 toxin damage.
+			// No longer deals toxin damage, but instead applies a damage vulnerability via signals.
 			new /obj/effect/temp_visual/revenant(affected_mob.loc)
 		if(SPT_PROB(25, seconds_per_tick))
 			need_mob_update += affected_mob.adjust_stamina_loss(stage, updating_stamina = FALSE)
@@ -71,3 +71,15 @@
 				affected_mob.visible_message(span_warning("[affected_mob] looks terrifyingly gaunt..."), span_revennotice("You suddenly feel like your skin is <i>wrong</i>..."))
 				affected_mob.add_atom_colour("#1d2953", TEMPORARY_COLOUR_PRIORITY)
 				addtimer(CALLBACK(src, PROC_REF(cure)), 10 SECONDS)
+
+/datum/disease/revblight/register_disease_signals()
+	. = ..()
+	RegisterSignal(affected_mob, COMSIG_MOB_APPLY_DAMAGE_MODIFIERS, PROC_REF(on_damage_modifier))
+
+/datum/disease/revblight/unregister_disease_signals()
+	UnregisterSignal(affected_mob, COMSIG_MOB_APPLY_DAMAGE_MODIFIERS)
+	return ..()
+
+/datum/disease/revblight/proc/on_damage_modifier(mob/living/source, list/damage_mods, ...)
+	SIGNAL_HANDLER
+	damage_mods += 1 + (0.15 * stage) // Stage 1 gives 1.15x damage, Stage 5 gives 1.75x damage

@@ -226,7 +226,7 @@
 //Blight: Infects nearby humans and in general messes living stuff up.
 /datum/action/cooldown/spell/aoe/revenant/blight
 	name = "Blight"
-	desc = "Causes nearby living things to waste away."
+	desc = "Causes nearby living things to waste away, rendering them vulnerable and making them take increased damage."
 	button_icon_state = "blight"
 	cooldown_time = 20 SECONDS
 
@@ -258,9 +258,9 @@
 					to_chat(human_target, span_revenminor("You feel [pick("suddenly sick", "a surge of nausea", "like your skin is <i>wrong</i>")]."))
 			else
 				if(mob.reagents)
-					mob.reagents.add_reagent(/datum/reagent/toxin/plasma, 5)
+					mob.reagents.add_reagent(/datum/reagent/toxin/plasma, 15)
 		else
-			mob.adjust_tox_loss(5)
+			mob.adjust_tox_loss(15)
 	for(var/obj/structure/spacevine/vine in victim) //Fucking with botanists, the ability.
 		vine.add_atom_colour("#823abb", TEMPORARY_COLOUR_PRIORITY)
 		new /obj/effect/temp_visual/revenant(vine.loc)
