@@ -1,6 +1,6 @@
 /datum/action/cooldown/spell/list_target/revenant_tether
 	name = "Tether"
-	desc = "Tether to a living mortal. Their death will unleash a violent spectral shockwave, and they will be immune to your area of effect abilities."
+	desc = "Tether to a living mortal. They will be immune to your area of effect abilities, and you will harvest essence when others die near them. If they die, the tether breaks."
 	background_icon_state = "bg_revenant"
 	overlay_icon_state = "bg_revenant_border"
 	button_icon = 'icons/mob/actions/actions_revenant.dmi'
@@ -62,12 +62,14 @@
 		return FALSE
 	
 	RegisterSignal(owner, COMSIG_LIVING_DEATH, PROC_REF(on_target_death))
+	RegisterSignal(SSdcs, COMSIG_GLOB_MOB_DEATH, PROC_REF(on_any_death))
 	
-tether_beam = tetherer.Beam(owner, icon_state = "drain_life", time = duration)
+	tether_beam = tetherer.Beam(owner, icon_state = "drain_life", time = duration)
 	return TRUE
 
 /datum/status_effect/revenant_tether/on_remove()
-	UnregisterSignal(owner, list(COMSIG_LIVING_DEATH))
+	UnregisterSignal(owner, COMSIG_LIVING_DEATH)
+	UnregisterSignal(SSdcs, COMSIG_GLOB_MOB_DEATH)
 	if(!QDELETED(tether_beam))
 		qdel(tether_beam)
 
@@ -78,30 +80,29 @@ tether_beam = tetherer.Beam(owner, icon_state = "drain_life", time = duration)
 
 /datum/status_effect/revenant_tether/proc/on_target_death(datum/source, gibbed)
 	SIGNAL_HANDLER
-	if(QDELETED(tetherer))
-		qdel(src)
-		return
-		
-	to_chat(tetherer, span_revenboldnotice("Your tethered victim [owner] has perished! A violent spectral shockwave erupts from your location, revealing you to the living!"))
-	tetherer.apply_status_effect(/datum/status_effect/revenant/revealed, 10 SECONDS)
-		
-	var/turf/death_turf = get_turf(tetherer)
-	if(death_turf)
-		playsound(death_turf, 'sound/effects/screech.ogg', 100, TRUE)
-		new /obj/effect/temp_visual/revenant(death_turf)
-		empulse(death_turf, 2, 4)
-		
-		for(var/mob/living/victim in view(4, death_turf))
-			if(victim == tetherer || isrevenant(victim))
-				continue
-			to_chat(victim, span_revenwarning("A terrifying wail echoes in your mind as violet energy erupts from [tetherer]!"))
-			victim.blind_eyes(2)
-			victim.add_confusion(5)
-			victim.adjust_stamina_loss(40)
-			
-		for(var/obj/machinery/light/light in view(4, death_turf))
-			light.flicker(rand(5, 10))
-			if(prob(50))
-				light.break_light_tube()
-				
+	if(!QDELETED(tetherer))
+		to_chat(tetherer, span_revenwarning("Your tethered victim [owner] has perished! The link has been severed."))
 	qdel(src)
+
+/datum/status_effect/revenant_tether/proc/on_any_death(datum/source, mob/living/victim, gibbed)
+	SIGNAL_HANDLER
+	if(QDELETED(tetherer) || tetherer.dormant || QDELETED(owner) || victim == owner || victim == tetherer)
+		return
+
+	if(get_dist(owner, victim) > 7)
+		return
+
+	if(LAZYFIND(tetherer.drained_mobs, REF(victim)))
+		return
+
+	var/essence_gained = 0
+
+	if(victim.client || victim.ckey)
+		essence_gained += rand(10, 15)
+	else
+		essence_gained += rand(2, 5)
+
+	if(essence_gained > 0)
+		to_chat(tetherer, span_revennotice("You siphon essence from the death of [victim] near your tethered partner."))
+		tetherer.change_essence_amount(essence_gained, FALSE, "tether proximity death of [victim]")
+		tetherer.souls_consumed++

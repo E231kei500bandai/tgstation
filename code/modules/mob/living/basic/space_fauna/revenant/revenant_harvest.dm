@@ -139,8 +139,7 @@
 	)
 
 	LAZYADD(drained_mobs, REF(target))
-	if(!LAZYFIND(leeched_mobs, REF(target)))
-		souls_consumed++
+	souls_consumed++
 	
 	if(target.stat != DEAD)
 		target.investigate_log("has died from revenant harvest.", INVESTIGATE_DEATHS)

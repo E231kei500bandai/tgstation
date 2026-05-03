@@ -65,8 +65,6 @@
 
 	/// Lazylist of drained mobs to ensure that we don't steal a soul from someone twice
 	var/list/drained_mobs = null
-	/// Lazylist of mobs we passively leeched from when they died
-	var/list/leeched_mobs = null
 	/// How many unique souls the revenant has consumed (passively or via harvest)
 	var/souls_consumed = 0
 	/// How many times the revenant has cast Tether
@@ -117,7 +115,6 @@
 	RegisterSignal(src, COMSIG_MOVABLE_PRE_MOVE, PROC_REF(on_move))
 	RegisterSignal(src, COMSIG_LIVING_LIFE, PROC_REF(on_life))
 	RegisterSignal(src, COMSIG_REFLECTION_UPDATED, PROC_REF(on_reflect))
-	RegisterSignal(SSdcs, COMSIG_GLOB_MOB_DEATH, PROC_REF(on_mob_death))
 	RegisterSignals(src, list(
 		SIGNAL_ADDTRAIT(TRAIT_REVENANT_REVEALED),
 		SIGNAL_REMOVETRAIT(TRAIT_REVENANT_REVEALED),
@@ -132,7 +129,6 @@
 
 /mob/living/basic/revenant/Destroy()
 	GLOB.revenant_relay_mobs -= src
-	UnregisterSignal(SSdcs, COMSIG_GLOB_MOB_DEATH)
 	return ..()
 
 /mob/living/basic/revenant/Login()
@@ -534,32 +530,5 @@
 	// but if we're (actually) invisible we look all wibbly and ghostly (unless the mirror is magic)
 	if(!HAS_TRAIT(src, TRAIT_REVENANT_REVEALED) && !istype(reflecting_in, /obj/structure/mirror/magic))
 		apply_wibbly_filters(reflection)
-
-/// Passive soul leech: gain essence when nearby mobs die
-/mob/living/basic/revenant/proc/on_mob_death(datum/source, mob/living/victim, gibbed)
-	SIGNAL_HANDLER
-	if(dormant || QDELETED(src) || victim == src)
-		return
-
-	// Only care if they're close
-	if(get_dist(src, victim) > 7)
-		return
-
-	// If already leeched or fully drained, do nothing
-	if(LAZYFIND(drained_mobs, REF(victim)) || LAZYFIND(leeched_mobs, REF(victim)))
-		return
-
-	var/essence_gained = 0
-
-	if(victim.client || victim.ckey)
-		essence_gained += rand(10, 15)
-	else
-		essence_gained += rand(2, 5)
-
-	if(essence_gained > 0)
-		to_chat(src, span_revennotice("You passively absorb some essence from the fresh death of [victim]."))
-		change_essence_amount(essence_gained, FALSE, "death of [victim]")
-		souls_consumed++
-		LAZYADD(leeched_mobs, REF(victim)) // Ensure we don't leech from them again if revived/re-killed
 
 #undef REVENANT_STUNNED_TRAIT
