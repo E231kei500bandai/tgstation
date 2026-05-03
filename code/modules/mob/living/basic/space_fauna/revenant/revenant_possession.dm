@@ -10,6 +10,7 @@
 	button_icon_state = "overload_lights"
 	cooldown_time = 45 SECONDS
 	target_radius = 5
+	spell_requirements = NONE
 	
 	var/unlock_amount = 100
 	var/cast_amount = 60

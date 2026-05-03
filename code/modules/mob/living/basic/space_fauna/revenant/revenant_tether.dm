@@ -7,6 +7,7 @@
 	button_icon_state = "r_transmit"
 	cooldown_time = 15 SECONDS
 	target_radius = 7
+	spell_requirements = NONE
 	
 	var/unlock_amount = 50
 	var/cast_amount = 40

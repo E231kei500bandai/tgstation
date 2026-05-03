@@ -7,6 +7,7 @@
 	button_icon_state = "r_haunt"
 	cooldown_time = 10 SECONDS
 	target_radius = 7
+	spell_requirements = NONE
 	
 	var/unlock_amount = 40
 	var/cast_amount = 20
