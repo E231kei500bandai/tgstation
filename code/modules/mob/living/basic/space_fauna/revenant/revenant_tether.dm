@@ -6,8 +6,7 @@
 	button_icon = 'icons/mob/actions/actions_revenant.dmi'
 	button_icon_state = "r_transmit"
 	cooldown_time = 15 SECONDS
-	max_targets = 1
-	range = 7
+	target_radius = 7
 	
 	var/unlock_amount = 50
 	var/cast_amount = 40
@@ -23,10 +22,10 @@
 		stun_duration = stun_duration, \
 	)
 
-/datum/action/cooldown/spell/list_target/revenant_tether/get_list_targets()
+/datum/action/cooldown/spell/list_target/revenant_tether/get_list_targets(atom/center, target_radius = 7)
 	var/list/targets = list()
 	var/mob/living/basic/revenant/caster = owner
-	for(var/mob/living/living_mob in view(range, caster))
+	for(var/mob/living/living_mob in view(target_radius, center))
 		if(living_mob == caster || living_mob.stat == DEAD)
 			continue
 		if(living_mob.has_status_effect(/datum/status_effect/revenant_tether))
@@ -34,9 +33,13 @@
 		targets += living_mob
 	return targets
 
-/datum/action/cooldown/spell/list_target/revenant_tether/cast_on_list_targets(list/targets)
+/datum/action/cooldown/spell/list_target/revenant_tether/cast(atom/cast_on)
+	. = ..()
+	if(. & SPELL_CANCEL_CAST)
+		return
+		
 	var/mob/living/basic/revenant/caster = owner
-	var/mob/living/target = targets[1]
+	var/mob/living/target = cast_on
 	
 	if(!caster || !target)
 		return

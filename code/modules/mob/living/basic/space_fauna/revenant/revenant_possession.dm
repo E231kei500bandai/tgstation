@@ -9,8 +9,7 @@
 	button_icon = 'icons/mob/actions/actions_revenant.dmi'
 	button_icon_state = "overload_lights"
 	cooldown_time = 45 SECONDS
-	max_targets = 1
-	range = 5
+	target_radius = 5
 	
 	var/unlock_amount = 100
 	var/cast_amount = 60
@@ -27,10 +26,10 @@
 		stun_duration = stun_duration, \
 	)
 
-/datum/action/cooldown/spell/list_target/revenant_possession/get_list_targets()
+/datum/action/cooldown/spell/list_target/revenant_possession/get_list_targets(atom/center, target_radius = 7)
 	var/list/targets = list()
 	var/mob/living/basic/revenant/caster = owner
-	for(var/mob/living/carbon/human/human_target in view(range, caster))
+	for(var/mob/living/carbon/human/human_target in view(target_radius, center))
 		if(human_target.stat != DEAD)
 			continue
 		if(human_target.GetComponent(/datum/component/revenant_possession))
@@ -40,9 +39,13 @@
 		targets += human_target
 	return targets
 
-/datum/action/cooldown/spell/list_target/revenant_possession/cast_on_list_targets(list/targets)
+/datum/action/cooldown/spell/list_target/revenant_possession/cast(atom/cast_on)
+	. = ..()
+	if(. & SPELL_CANCEL_CAST)
+		return
+		
 	var/mob/living/basic/revenant/caster = owner
-	var/mob/living/carbon/human/target = targets[1]
+	var/mob/living/carbon/human/target = cast_on
 	
 	if(!caster || !target)
 		return
@@ -75,8 +78,8 @@
 	possessed_body.add_traits(list(TRAIT_PACIFISM, TRAIT_MUTE, TRAIT_NO_SLIP_ALL), "revenant_possession")
 	possessed_body.add_movespeed_modifier(/datum/movespeed_modifier/revenant_possession)
 	possessed_body.set_stat(CONSCIOUS)
-	possessed_body.blind_eyes(0)
-	possessed_body.blur_eyes(0)
+	possessed_body.adjust_blindness(-possessed_body.get_blindness())
+	possessed_body.adjust_blurriness(-possessed_body.get_blurriness())
 	
 	leave_action = new /datum/action/innate/revenant_leave_corpse()
 	leave_action.Grant(possessed_body)

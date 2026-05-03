@@ -6,8 +6,7 @@
 	button_icon = 'icons/mob/actions/actions_revenant.dmi'
 	button_icon_state = "r_haunt"
 	cooldown_time = 10 SECONDS
-	max_targets = 1
-	range = 7
+	target_radius = 7
 	
 	var/unlock_amount = 40
 	var/cast_amount = 20
@@ -16,17 +15,17 @@
 
 /datum/action/cooldown/spell/list_target/revenant_mark/New(Target)
 	. = ..()
-	AddComponent(/datum/component/revenant_ability, 
-		unlock_amount = unlock_amount, 
-		cast_amount = cast_amount, 
-		reveal_duration = reveal_duration, 
-		stun_duration = stun_duration,
+	AddComponent(/datum/component/revenant_ability, \
+		unlock_amount = unlock_amount, \
+		cast_amount = cast_amount, \
+		reveal_duration = reveal_duration, \
+		stun_duration = stun_duration, \
 	)
 
-/datum/action/cooldown/spell/list_target/revenant_mark/get_list_targets()
+/datum/action/cooldown/spell/list_target/revenant_mark/get_list_targets(atom/center, target_radius = 7)
 	var/list/targets = list()
 	var/mob/living/basic/revenant/caster = owner
-	for(var/mob/living/living_mob in view(range, caster))
+	for(var/mob/living/living_mob in view(target_radius, center))
 		if(living_mob == caster || living_mob.stat != DEAD)
 			continue
 		if(living_mob.GetComponent(/datum/component/revenant_mark))
@@ -34,9 +33,13 @@
 		targets += living_mob
 	return targets
 
-/datum/action/cooldown/spell/list_target/revenant_mark/cast_on_list_targets(list/targets)
+/datum/action/cooldown/spell/list_target/revenant_mark/cast(atom/cast_on)
+	. = ..()
+	if(. & SPELL_CANCEL_CAST)
+		return
+		
 	var/mob/living/basic/revenant/caster = owner
-	var/mob/living/target = targets[1]
+	var/mob/living/target = cast_on
 	
 	if(!caster || !target)
 		return
@@ -70,8 +73,8 @@
 	for(var/mob/living/victim in view(3, marked_mob))
 		if(isrevenant(victim))
 			continue
-		victim.blind_eyes(2)
-		victim.add_confusion(3)
+		victim.adjust_blindness(2 SECONDS)
+		victim.adjust_confusion(3 SECONDS)
 		
 	if(!QDELETED(caster))
 		to_chat(caster, span_revennotice("Your mark on [marked_mob] has been triggered!"))
