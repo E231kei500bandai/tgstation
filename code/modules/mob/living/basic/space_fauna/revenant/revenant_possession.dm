@@ -78,8 +78,8 @@
 	possessed_body.add_traits(list(TRAIT_PACIFISM, TRAIT_MUTE, TRAIT_NO_SLIP_ALL), "revenant_possession")
 	possessed_body.add_movespeed_modifier(/datum/movespeed_modifier/revenant_possession)
 	possessed_body.set_stat(CONSCIOUS)
-	possessed_body.adjust_blindness(-possessed_body.get_blindness())
-	possessed_body.adjust_blurriness(-possessed_body.get_blurriness())
+	possessed_body.set_temp_blindness(0)
+	possessed_body.set_eye_blur(0)
 	
 	leave_action = new /datum/action/innate/revenant_leave_corpse()
 	leave_action.Grant(possessed_body)

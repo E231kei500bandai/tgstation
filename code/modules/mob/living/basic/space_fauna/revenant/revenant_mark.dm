@@ -73,7 +73,7 @@
 	for(var/mob/living/victim in view(3, marked_mob))
 		if(isrevenant(victim))
 			continue
-		victim.adjust_blindness(2 SECONDS)
+		victim.adjust_temp_blindness(2 SECONDS)
 		victim.adjust_confusion(3 SECONDS)
 		
 	if(!QDELETED(caster))
