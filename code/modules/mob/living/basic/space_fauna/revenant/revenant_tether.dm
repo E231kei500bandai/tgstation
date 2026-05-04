@@ -23,6 +23,12 @@
 		stun_duration = stun_duration, \
 	)
 
+/datum/action/cooldown/spell/list_target/revenant_tether/PreActivate(atom/caster)
+	var/datum/component/revenant_ability/rev_comp = GetComponent(/datum/component/revenant_ability)
+	if(rev_comp?.locked)
+		return Activate(caster)
+	return ..()
+
 /datum/action/cooldown/spell/list_target/revenant_tether/get_list_targets(atom/center, target_radius = 7)
 	var/list/targets = list()
 	var/mob/living/basic/revenant/caster = owner

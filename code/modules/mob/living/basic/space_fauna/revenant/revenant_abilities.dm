@@ -12,6 +12,12 @@
 
 	antimagic_flags = MAGIC_RESISTANCE_HOLY|MAGIC_RESISTANCE_MIND
 
+/datum/action/cooldown/spell/list_target/telepathy/revenant/PreActivate(atom/caster)
+	var/datum/component/revenant_ability/rev_comp = GetComponent(/datum/component/revenant_ability)
+	if(rev_comp?.locked)
+		return Activate(caster)
+	return ..()
+
 /datum/action/cooldown/spell/aoe/revenant
 	background_icon_state = "bg_revenant"
 	overlay_icon_state = "bg_revenant_border"
