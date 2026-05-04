@@ -64,7 +64,7 @@
 	caster_mind.transfer_to(possessed_body)
 	
 	// Setup the possessed body (pseudo-invincible, but we track damage manually)
-	possessed_body.add_traits(list(TRAIT_PACIFISM, TRAIT_MUTE, TRAIT_NO_SLIP_ALL, TRAIT_FAKEDEATH, TRAIT_NODEATH, TRAIT_NOHARDCRIT, TRAIT_NOSOFTCRIT), "revenant_possession")
+	possessed_body.add_traits(list(TRAIT_PACIFISM, TRAIT_MUTE, TRAIT_NO_SLIP_ALL, TRAIT_FAKEDEATH, TRAIT_NODEATH, TRAIT_NOHARDCRIT, TRAIT_NOSOFTCRIT, TRAIT_NOBREATH, TRAIT_NOBLOOD, TRAIT_NOPULSE), "revenant_possession")
 	possessed_body.add_movespeed_modifier(/datum/movespeed_modifier/revenant_possession)
 	possessed_body.set_stat(CONSCIOUS)
 	possessed_body.set_temp_blindness(0)
@@ -116,7 +116,7 @@
 		possessed_body.ghostize(FALSE)
 			
 	if(possessed_body)
-		possessed_body.remove_traits(list(TRAIT_PACIFISM, TRAIT_MUTE, TRAIT_NO_SLIP_ALL, TRAIT_FAKEDEATH, TRAIT_NODEATH, TRAIT_NOHARDCRIT, TRAIT_NOSOFTCRIT), "revenant_possession")
+		possessed_body.remove_traits(list(TRAIT_PACIFISM, TRAIT_MUTE, TRAIT_NO_SLIP_ALL, TRAIT_FAKEDEATH, TRAIT_NODEATH, TRAIT_NOHARDCRIT, TRAIT_NOSOFTCRIT, TRAIT_NOBREATH, TRAIT_NOBLOOD, TRAIT_NOPULSE), "revenant_possession")
 		possessed_body.remove_movespeed_modifier(/datum/movespeed_modifier/revenant_possession)
 		if(possessed_body.stat != DEAD)
 			possessed_body.death(FALSE)
