@@ -1,7 +1,6 @@
 #define REVENANT_DEFILE_MIN_DAMAGE 30
 #define REVENANT_DEFILE_MAX_DAMAGE 50
 
-//Transmit: the revemant's only direct way to communicate. Sends a single message silently to a single mob
 /datum/action/cooldown/spell/list_target/telepathy/revenant
 	name = "Revenant Transmit"
 	background_icon_state = "bg_revenant"
@@ -12,7 +11,48 @@
 
 	antimagic_flags = MAGIC_RESISTANCE_HOLY|MAGIC_RESISTANCE_MIND
 
+/datum/action/cooldown/spell/list_target/telepathy/revenant/New(Target)
+	. = ..()
+	AddComponent(/datum/component/revenant_ability, \
+		unlock_amount = 0, \
+		cast_amount = 0, \
+		reveal_duration = 0, \
+		stun_duration = 0, \
+	)
+
 /datum/action/cooldown/spell/list_target/telepathy/revenant/PreActivate(atom/caster)
+	var/datum/component/revenant_ability/rev_comp = GetComponent(/datum/component/revenant_ability)
+	if(rev_comp?.locked)
+		return Activate(caster)
+	return ..()
+
+/datum/action/cooldown/spell/list_target/revenant
+	background_icon_state = "bg_revenant"
+	overlay_icon_state = "bg_revenant_border"
+	button_icon = 'icons/mob/actions/actions_revenant.dmi'
+
+	antimagic_flags = MAGIC_RESISTANCE_HOLY
+	spell_requirements = NONE
+
+	/// How much essence it costs to unlock
+	var/unlock_amount = 100
+	/// How much essence it costs to use
+	var/cast_amount = 50
+	/// How long it reveals the revenant
+	var/reveal_duration = 8 SECONDS
+	// How long it stuns the revenant
+	var/stun_duration = 2 SECONDS
+
+/datum/action/cooldown/spell/list_target/revenant/New(Target)
+	. = ..()
+	AddComponent(/datum/component/revenant_ability, \
+		unlock_amount = unlock_amount, \
+		cast_amount = cast_amount, \
+		reveal_duration = reveal_duration, \
+		stun_duration = stun_duration, \
+	)
+
+/datum/action/cooldown/spell/list_target/revenant/PreActivate(atom/caster)
 	var/datum/component/revenant_ability/rev_comp = GetComponent(/datum/component/revenant_ability)
 	if(rev_comp?.locked)
 		return Activate(caster)

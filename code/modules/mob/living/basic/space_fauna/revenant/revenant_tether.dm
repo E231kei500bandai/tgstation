@@ -1,35 +1,16 @@
-/datum/action/cooldown/spell/list_target/revenant_tether
+/datum/action/cooldown/spell/list_target/revenant/revenant_tether
 	name = "Tether"
 	desc = "Tether to a living mortal. They will be immune to your area of effect abilities, and you will harvest essence when others die near them. If they die, the tether breaks."
-	background_icon_state = "bg_revenant"
-	overlay_icon_state = "bg_revenant_border"
-	button_icon = 'icons/mob/actions/actions_revenant.dmi'
 	button_icon_state = "r_transmit"
 	cooldown_time = 15 SECONDS
 	target_radius = 7
-	spell_requirements = NONE
 	
-	var/unlock_amount = 50
-	var/cast_amount = 40
-	var/reveal_duration = 5 SECONDS
-	var/stun_duration = 2 SECONDS
+	unlock_amount = 50
+	cast_amount = 40
+	reveal_duration = 5 SECONDS
+	stun_duration = 2 SECONDS
 
-/datum/action/cooldown/spell/list_target/revenant_tether/New(Target)
-	. = ..()
-	AddComponent(/datum/component/revenant_ability, \
-		unlock_amount = unlock_amount, \
-		cast_amount = cast_amount, \
-		reveal_duration = reveal_duration, \
-		stun_duration = stun_duration, \
-	)
-
-/datum/action/cooldown/spell/list_target/revenant_tether/PreActivate(atom/caster)
-	var/datum/component/revenant_ability/rev_comp = GetComponent(/datum/component/revenant_ability)
-	if(rev_comp?.locked)
-		return Activate(caster)
-	return ..()
-
-/datum/action/cooldown/spell/list_target/revenant_tether/get_list_targets(atom/center, target_radius = 7)
+/datum/action/cooldown/spell/list_target/revenant/revenant_tether/get_list_targets(atom/center, target_radius = 7)
 	var/list/targets = list()
 	var/mob/living/basic/revenant/caster = owner
 	for(var/mob/living/living_mob in view(target_radius, center))
@@ -40,7 +21,7 @@
 		targets += living_mob
 	return targets
 
-/datum/action/cooldown/spell/list_target/revenant_tether/cast(atom/cast_on)
+/datum/action/cooldown/spell/list_target/revenant/revenant_tether/cast(atom/cast_on)
 	. = ..()
 	if(. & SPELL_CANCEL_CAST)
 		return

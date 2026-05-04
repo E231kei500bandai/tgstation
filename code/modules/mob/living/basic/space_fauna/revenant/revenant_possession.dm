@@ -1,39 +1,20 @@
 /datum/movespeed_modifier/revenant_possession
 	multiplicative_slowdown = 1.5
 
-/datum/action/cooldown/spell/list_target/revenant_possession
+/datum/action/cooldown/spell/list_target/revenant/revenant_possession
 	name = "Possess Corpse"
 	desc = "Temporarily inhabit a dead body, allowing you to shamble around and interact with the world."
-	background_icon_state = "bg_revenant"
-	overlay_icon_state = "bg_revenant_border"
-	button_icon = 'icons/mob/actions/actions_revenant.dmi'
 	button_icon_state = "overload_lights"
 	cooldown_time = 45 SECONDS
 	target_radius = 5
-	spell_requirements = NONE
 	
-	var/unlock_amount = 100
-	var/cast_amount = 60
-	var/reveal_duration = 5 SECONDS
-	var/stun_duration = 3 SECONDS
+	unlock_amount = 100
+	cast_amount = 60
+	reveal_duration = 5 SECONDS
+	stun_duration = 3 SECONDS
 	var/possession_duration = 45 SECONDS
 
-/datum/action/cooldown/spell/list_target/revenant_possession/New(Target)
-	. = ..()
-	AddComponent(/datum/component/revenant_ability, \
-		unlock_amount = unlock_amount, \
-		cast_amount = cast_amount, \
-		reveal_duration = reveal_duration, \
-		stun_duration = stun_duration, \
-	)
-
-/datum/action/cooldown/spell/list_target/revenant_possession/PreActivate(atom/caster)
-	var/datum/component/revenant_ability/rev_comp = GetComponent(/datum/component/revenant_ability)
-	if(rev_comp?.locked)
-		return Activate(caster)
-	return ..()
-
-/datum/action/cooldown/spell/list_target/revenant_possession/get_list_targets(atom/center, target_radius = 7)
+/datum/action/cooldown/spell/list_target/revenant/revenant_possession/get_list_targets(atom/center, target_radius = 7)
 	var/list/targets = list()
 	var/mob/living/basic/revenant/caster = owner
 	for(var/mob/living/carbon/human/human_target in view(target_radius, center))
@@ -46,7 +27,7 @@
 		targets += human_target
 	return targets
 
-/datum/action/cooldown/spell/list_target/revenant_possession/cast(atom/cast_on)
+/datum/action/cooldown/spell/list_target/revenant/revenant_possession/cast(atom/cast_on)
 	. = ..()
 	if(. & SPELL_CANCEL_CAST)
 		return

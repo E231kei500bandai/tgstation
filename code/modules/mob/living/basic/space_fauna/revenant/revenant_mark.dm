@@ -1,35 +1,16 @@
-/datum/action/cooldown/spell/list_target/revenant_mark
+/datum/action/cooldown/spell/list_target/revenant/revenant_mark
 	name = "Revenant Mark"
 	desc = "Plant a spectral trap on a corpse. When examined, it will blind and confuse nearby mortals, feeding you essence."
-	background_icon_state = "bg_revenant"
-	overlay_icon_state = "bg_revenant_border"
-	button_icon = 'icons/mob/actions/actions_revenant.dmi'
 	button_icon_state = "r_haunt"
 	cooldown_time = 10 SECONDS
 	target_radius = 7
-	spell_requirements = NONE
 	
-	var/unlock_amount = 40
-	var/cast_amount = 20
-	var/reveal_duration = 3 SECONDS
-	var/stun_duration = 1 SECONDS
+	unlock_amount = 40
+	cast_amount = 20
+	reveal_duration = 3 SECONDS
+	stun_duration = 1 SECONDS
 
-/datum/action/cooldown/spell/list_target/revenant_mark/New(Target)
-	. = ..()
-	AddComponent(/datum/component/revenant_ability, \
-		unlock_amount = unlock_amount, \
-		cast_amount = cast_amount, \
-		reveal_duration = reveal_duration, \
-		stun_duration = stun_duration, \
-	)
-
-/datum/action/cooldown/spell/list_target/revenant_mark/PreActivate(atom/caster)
-	var/datum/component/revenant_ability/rev_comp = GetComponent(/datum/component/revenant_ability)
-	if(rev_comp?.locked)
-		return Activate(caster)
-	return ..()
-
-/datum/action/cooldown/spell/list_target/revenant_mark/get_list_targets(atom/center, target_radius = 7)
+/datum/action/cooldown/spell/list_target/revenant/revenant_mark/get_list_targets(atom/center, target_radius = 7)
 	var/list/targets = list()
 	var/mob/living/basic/revenant/caster = owner
 	for(var/mob/living/living_mob in view(target_radius, center))
@@ -40,7 +21,7 @@
 		targets += living_mob
 	return targets
 
-/datum/action/cooldown/spell/list_target/revenant_mark/cast(atom/cast_on)
+/datum/action/cooldown/spell/list_target/revenant/revenant_mark/cast(atom/cast_on)
 	. = ..()
 	if(. & SPELL_CANCEL_CAST)
 		return
