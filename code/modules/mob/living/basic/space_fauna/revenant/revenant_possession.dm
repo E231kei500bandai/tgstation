@@ -47,6 +47,7 @@
 	var/datum/mind/caster_mind
 	var/timer_id
 	var/datum/action/innate/revenant_leave_corpse/leave_action
+	var/accumulated_damage = 0
 
 /datum/component/revenant_possession/Initialize(mob/living/basic/revenant/caster, duration)
 	if(!istype(parent, /mob/living/carbon/human))
@@ -62,8 +63,8 @@
 	// Transfer mind
 	caster_mind.transfer_to(possessed_body)
 	
-	// Setup the possessed body (no longer invincible)
-	possessed_body.add_traits(list(TRAIT_PACIFISM, TRAIT_MUTE, TRAIT_NO_SLIP_ALL), "revenant_possession")
+	// Setup the possessed body (pseudo-invincible, but we track damage manually)
+	possessed_body.add_traits(list(TRAIT_PACIFISM, TRAIT_MUTE, TRAIT_NO_SLIP_ALL, TRAIT_FAKEDEATH, TRAIT_NODEATH, TRAIT_NOHARDCRIT, TRAIT_NOSOFTCRIT), "revenant_possession")
 	possessed_body.add_movespeed_modifier(/datum/movespeed_modifier/revenant_possession)
 	possessed_body.set_stat(CONSCIOUS)
 	possessed_body.set_temp_blindness(0)
@@ -72,10 +73,10 @@
 	leave_action = new /datum/action/innate/revenant_leave_corpse()
 	leave_action.Grant(possessed_body)
 	
-	to_chat(possessed_body, span_revenboldnotice("You have possessed [possessed_body]! You have [DisplayTimeText(duration)] before you are ejected. You are fragile, if this body dies you will be violently expelled and revealed!"))
+	to_chat(possessed_body, span_revenboldnotice("You have possessed [possessed_body]! You have [DisplayTimeText(duration)] before you are ejected. You are fragile, if this body takes too much damage you will be violently expelled and revealed!"))
 	
 	RegisterSignal(caster, COMSIG_QDELETING, PROC_REF(on_caster_deleted))
-	RegisterSignal(possessed_body, COMSIG_LIVING_DEATH, PROC_REF(on_possessed_death))
+	RegisterSignal(possessed_body, COMSIG_MOB_AFTER_APPLY_DAMAGE, PROC_REF(on_damage))
 	
 	timer_id = addtimer(CALLBACK(src, PROC_REF(end_possession)), duration, TIMER_STOPPABLE)
 /datum/component/revenant_possession/Destroy()
@@ -94,28 +95,31 @@
 		possessed_body.ghostize(FALSE) // Kick them out if revenant body is destroyed
 	qdel(src)
 
-/datum/component/revenant_possession/proc/on_possessed_death()
+/datum/component/revenant_possession/proc/on_damage(datum/source, damage)
 	SIGNAL_HANDLER
-	qdel(src)
+	if(damage > 0)
+		accumulated_damage += damage
+		if(accumulated_damage >= 30) // Fragile
+			var/mob/living/carbon/human/possessed_body = parent
+			to_chat(possessed_body, span_revenwarning("This body has sustained too much damage and is collapsing!"))
+			qdel(src)
 
 /datum/component/revenant_possession/proc/end_possession()
 	var/mob/living/carbon/human/possessed_body = parent
 	
-	if(possessed_body && caster_mind && caster_mind.current == possessed_body)
-		if(caster && !QDELETED(caster))
+	if(caster && !QDELETED(caster))
+		if(caster_mind && (caster_mind.current == possessed_body || isobserver(caster_mind.current)))
 			caster_mind.transfer_to(caster)
 			to_chat(caster, span_revennotice("Your possession of [possessed_body] has ended."))
-			caster.apply_status_effect(/datum/status_effect/revenant/revealed, 5 SECONDS)
-		else
-			possessed_body.ghostize(FALSE)
+		caster.apply_status_effect(/datum/status_effect/revenant/revealed, 5 SECONDS)
+	else if(possessed_body && caster_mind && caster_mind.current == possessed_body)
+		possessed_body.ghostize(FALSE)
 			
 	if(possessed_body)
-		possessed_body.remove_traits(list(TRAIT_PACIFISM, TRAIT_MUTE, TRAIT_NO_SLIP_ALL), "revenant_possession")
+		possessed_body.remove_traits(list(TRAIT_PACIFISM, TRAIT_MUTE, TRAIT_NO_SLIP_ALL, TRAIT_FAKEDEATH, TRAIT_NODEATH, TRAIT_NOHARDCRIT, TRAIT_NOSOFTCRIT), "revenant_possession")
 		possessed_body.remove_movespeed_modifier(/datum/movespeed_modifier/revenant_possession)
 		if(possessed_body.stat != DEAD)
-			possessed_body.set_stat(DEAD)
-		
-	qdel(src)
+			possessed_body.death(FALSE)
 
 /datum/action/innate/revenant_leave_corpse
 	name = "End Possession"

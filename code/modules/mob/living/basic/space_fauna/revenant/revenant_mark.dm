@@ -1,39 +1,50 @@
-/datum/action/cooldown/spell/list_target/revenant/revenant_mark
+/datum/action/cooldown/spell/pointed/revenant_mark
 	name = "Revenant Mark"
 	desc = "Plant a spectral trap on a corpse. When examined, it will blind and confuse nearby mortals, feeding you essence."
+	background_icon_state = "bg_revenant"
+	overlay_icon_state = "bg_revenant_border"
+	button_icon = 'icons/mob/actions/actions_revenant.dmi'
 	button_icon_state = "r_haunt"
 	cooldown_time = 10 SECONDS
-	target_radius = 7
+	spell_requirements = NONE
 	
-	unlock_amount = 40
-	cast_amount = 20
-	reveal_duration = 3 SECONDS
-	stun_duration = 1 SECONDS
+	var/unlock_amount = 40
+	var/cast_amount = 20
+	var/reveal_duration = 3 SECONDS
+	var/stun_duration = 1 SECONDS
 
-/datum/action/cooldown/spell/list_target/revenant/revenant_mark/get_list_targets(atom/center, target_radius = 7)
-	var/list/targets = list()
+/datum/action/cooldown/spell/pointed/revenant_mark/New(Target)
+	. = ..()
+	AddComponent(/datum/component/revenant_ability, \
+		unlock_amount = unlock_amount, \
+		cast_amount = cast_amount, \
+		reveal_duration = reveal_duration, \
+		stun_duration = stun_duration, \
+	)
+
+/datum/action/cooldown/spell/pointed/revenant_mark/is_valid_target(atom/cast_on)
 	var/mob/living/basic/revenant/caster = owner
-	for(var/mob/living/living_mob in view(target_radius, center))
-		if(living_mob == caster || living_mob.stat != DEAD)
-			continue
-		if(living_mob.GetComponent(/datum/component/revenant_mark))
-			continue
-		targets += living_mob
-	return targets
+	if(!istype(cast_on, /mob/living) || cast_on == caster)
+		return FALSE
+	var/mob/living/living_target = cast_on
+	if(living_target.stat != DEAD)
+		return FALSE
+	if(living_target.GetComponent(/datum/component/revenant_mark))
+		return FALSE
+	return TRUE
 
-/datum/action/cooldown/spell/list_target/revenant/revenant_mark/cast(atom/cast_on)
+/datum/action/cooldown/spell/pointed/revenant_mark/cast(mob/living/cast_on)
 	. = ..()
 	if(. & SPELL_CANCEL_CAST)
 		return
 		
 	var/mob/living/basic/revenant/caster = owner
-	var/mob/living/target = cast_on
 	
-	if(!caster || !target)
+	if(!caster || !cast_on)
 		return
 	
-	target.AddComponent(/datum/component/revenant_mark, caster)
-	to_chat(caster, span_revennotice("You place a spectral trap on [target]."))
+	cast_on.AddComponent(/datum/component/revenant_mark, caster)
+	to_chat(caster, span_revennotice("You place a spectral trap on [cast_on]."))
 	return TRUE
 
 /datum/component/revenant_mark
