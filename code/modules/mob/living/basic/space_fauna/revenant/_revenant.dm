@@ -82,9 +82,9 @@
 		/datum/action/cooldown/spell/aoe/revenant/malfunction,
 		/datum/action/cooldown/spell/aoe/revenant/overload,
 		/datum/action/cooldown/spell/list_target/telepathy/revenant,
-		/datum/action/cooldown/spell/list_target/revenant_tether,
-		/datum/action/cooldown/spell/list_target/revenant_possession,
-		/datum/action/cooldown/spell/list_target/revenant_mark,
+		/datum/action/cooldown/spell/list_target/revenant/revenant_tether,
+		/datum/action/cooldown/spell/list_target/revenant/revenant_possession,
+		/datum/action/cooldown/spell/pointed/revenant_mark,
 	)
 
 	/// The resource, and health, of revenants.
