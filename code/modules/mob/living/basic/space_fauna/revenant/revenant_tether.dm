@@ -58,13 +58,15 @@
 	var/mob/living/basic/revenant/tetherer
 	var/datum/beam/tether_beam
 
-/datum/status_effect/revenant_tether/on_apply()
-	if(isnull(args[1]))
+/datum/status_effect/revenant_tether/on_creation(mob/living/new_owner, mob/living/basic/revenant/tetherer)
+	if(isnull(tetherer))
 		return FALSE
-	tetherer = args[1]
+	src.tetherer = tetherer
 	if(QDELETED(tetherer))
 		return FALSE
-	
+	return ..()
+
+/datum/status_effect/revenant_tether/on_apply()
 	RegisterSignal(owner, COMSIG_LIVING_DEATH, PROC_REF(on_target_death))
 	RegisterSignal(SSdcs, COMSIG_GLOB_MOB_DEATH, PROC_REF(on_any_death))
 	
